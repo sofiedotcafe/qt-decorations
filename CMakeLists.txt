@@ -21,46 +21,48 @@ endif()
 include(GNUInstallDirs)
 include(FeatureSummary)
 
+# Qt version-specific setup
 if (USE_QT6)
-    find_package(QT NAMES Qt6 COMPONENTS Core Gui Svg Wayland Widgets REQUIRED)
+    find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS
+        Core
+        Gui
+        Svg
+        WaylandClient
+        Widgets
+        GuiPrivate
+        WaylandClientPrivate
+    )
 else()
-    find_package(QT NAMES Qt5 COMPONENTS Core Gui Svg Wayland Widgets REQUIRED)
+    find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS
+        Core
+        Gui
+        Svg
+        WaylandClient
+        Widgets
+    )
+
+    find_package(Qt5Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
+    find_package(Qt5WaylandClient ${QT_MIN_VERSION} CONFIG REQUIRED Private)
+    find_package(Qt5ThemeSupport REQUIRED)
+    find_package(Qt5XkbCommonSupport ${QT_MIN_VERSION})
 endif()
 
-find_package(Qt${QT_VERSION_MAJOR} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS
-    Core
-    Gui
-    Svg
-    WaylandClient
-    Widgets
-)
-
-find_package(Qt${QT_VERSION_MAJOR}Gui ${QT_MIN_VERSION} CONFIG REQUIRED Private)
-if (NOT USE_QT6)
-    find_package(Qt${QT_VERSION_MAJOR}ThemeSupport REQUIRED)
-endif()
-
-# NOTE: I don't know how to do this only in case of qt_config(xkbcommon).
-# We would miss an include in QWaylandDisplay header file.
-if (NOT USE_QT6)
-    find_package(Qt${QT_VERSION_MAJOR}XkbCommonSupport ${QT_MIN_VERSION})
-endif()
-
+# Optional feature flag
 if (HAS_QT6_SUPPORT OR USE_QT6)
     message(STATUS "Enabling Qt Wayland decoration shadows support")
     message(STATUS "NOTE: This support requires changes in Qt Wayland from Qt 6.2")
     add_definitions(-DHAS_QT6_SUPPORT)
 endif()
 
+# Determine plugin install path
 if (NOT QT_PLUGINS_DIR)
     if (NOT USE_QT6)
-        get_target_property(REAL_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE}
-                            IMPORTED_LOCATION)
+        get_target_property(REAL_QMAKE_EXECUTABLE Qt5Core_QMAKE_EXECUTABLE IMPORTED_LOCATION)
         execute_process(COMMAND "${REAL_QMAKE_EXECUTABLE}" -query QT_INSTALL_PLUGINS
                         OUTPUT_VARIABLE QT_PLUGINS_DIR
                         ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
     else()
-        set(QT_PLUGINS_DIR ${QT6_INSTALL_PLUGINS})
+        set(QT_PLUGINS_DIR ${Qt6_INSTALL_PLUGINS})
     endif()
 endif()
 

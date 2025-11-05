@@ -19,6 +19,8 @@
 
 #include "QCatppuccinDecorations.h"
 
+#include <QGuiApplication>
+
 #include <QtWaylandClient/private/qwaylandshellsurface_p.h>
 #include <QtWaylandClient/private/qwaylandshmbackingstore_p.h>
 #include <QtWaylandClient/private/qwaylandwindow_p.h>
@@ -839,19 +841,19 @@ void QCatppuccinDecorations::processMouseTop(QWaylandInputDevice *inputDevice, c
         if (local.x() <= margins().left()) {
             // top left bit
 #if QT_CONFIG(cursor)
-            waylandWindow()->setMouseCursor(inputDevice, Qt::SizeFDiagCursor);
+            QGuiApplication::setOverrideCursor(Qt::SizeFDiagCursor);
 #endif
             startResize(inputDevice, Qt::TopEdge | Qt::LeftEdge, b);
         } else if (local.x() > surfaceRect.right() - margins().left()) {
             // top right bit
 #if QT_CONFIG(cursor)
-            waylandWindow()->setMouseCursor(inputDevice, Qt::SizeBDiagCursor);
+            QGuiApplication::setOverrideCursor(Qt::SizeBDiagCursor);
 #endif
             startResize(inputDevice, Qt::TopEdge | Qt::RightEdge, b);
         } else {
             // top resize bit
 #if QT_CONFIG(cursor)
-            waylandWindow()->setMouseCursor(inputDevice, Qt::SizeVerCursor);
+            QGuiApplication::setOverrideCursor(Qt::SizeVerCursor);
 #endif
             startResize(inputDevice, Qt::TopEdge, b);
         }
@@ -885,7 +887,7 @@ void QCatppuccinDecorations::processMouseTop(QWaylandInputDevice *inputDevice, c
             waylandWindow()->shellSurface()->showWindowMenu(inputDevice);
         }
 #if QT_CONFIG(cursor)
-        waylandWindow()->restoreMouseCursor(inputDevice);
+        QGuiApplication::restoreOverrideCursor();
 #endif
         startMove(inputDevice, b);
     }
@@ -899,19 +901,19 @@ void QCatppuccinDecorations::processMouseBottom(QWaylandInputDevice *inputDevice
     if (local.x() <= margins().left()) {
         // bottom left bit
 #if QT_CONFIG(cursor)
-        waylandWindow()->setMouseCursor(inputDevice, Qt::SizeBDiagCursor);
+        QGuiApplication::setOverrideCursor(Qt::SizeBDiagCursor);
 #endif
         startResize(inputDevice, Qt::BottomEdge | Qt::LeftEdge, b);
     } else if (local.x() > window()->width() + margins().right()) {
         // bottom right bit
 #if QT_CONFIG(cursor)
-        waylandWindow()->setMouseCursor(inputDevice, Qt::SizeFDiagCursor);
+        QGuiApplication::setOverrideCursor(Qt::SizeFDiagCursor);
 #endif
         startResize(inputDevice, Qt::BottomEdge | Qt::RightEdge, b);
     } else {
         // bottom bit
 #if QT_CONFIG(cursor)
-        waylandWindow()->setMouseCursor(inputDevice, Qt::SizeVerCursor);
+        QGuiApplication::setOverrideCursor(Qt::SizeVerCursor);
 #endif
         startResize(inputDevice, Qt::BottomEdge, b);
     }
@@ -924,7 +926,7 @@ void QCatppuccinDecorations::processMouseLeft(QWaylandInputDevice *inputDevice,
     Q_UNUSED(local)
     Q_UNUSED(mods)
 #if QT_CONFIG(cursor)
-    waylandWindow()->setMouseCursor(inputDevice, Qt::SizeHorCursor);
+    QGuiApplication::setOverrideCursor(Qt::SizeHorCursor);
 #endif
     startResize(inputDevice, Qt::LeftEdge, b);
 }
@@ -936,7 +938,7 @@ void QCatppuccinDecorations::processMouseRight(QWaylandInputDevice *inputDevice,
     Q_UNUSED(local)
     Q_UNUSED(mods)
 #if QT_CONFIG(cursor)
-    waylandWindow()->setMouseCursor(inputDevice, Qt::SizeHorCursor);
+    QGuiApplication::setOverrideCursor(Qt::SizeHorCursor);
 #endif
     startResize(inputDevice, Qt::RightEdge, b);
 }
