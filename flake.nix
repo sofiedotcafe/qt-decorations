@@ -28,8 +28,9 @@
         inputs.hercules-ci-effects.flakeModule
       ];
 
-      flake.homeModules = {
-        qt-decorations = ./nix/homeModule.nix;
+      flake.homeModules = rec {
+        default = import ./nix/homeModule.nix inputs;
+        qt-decorations = default;
       };
 
       perSystem =
@@ -53,11 +54,9 @@
             settings = {
               hooks = {
                 clang-format.enable = true;
-
                 nixfmt-rfc-style.enable = true;
                 deadnix.enable = true;
                 statix.enable = true;
-
                 commitizen.enable = true;
                 typos.enable = true;
                 shellcheck.enable = true;
