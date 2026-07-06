@@ -12,7 +12,7 @@ let
   cfg = config.qt.decoration;
 
   decorationPackages = {
-    catppuccin = inputs.self.packages.${pkgs.system}.qcatppuccindecorations;
+    catppuccin = inputs.self.packages.${pkgs.system}.default;
   };
 
   makeQtPluginPaths =

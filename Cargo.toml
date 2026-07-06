@@ -1,0 +1,28 @@
+[package]
+name = "qt-wayland-catppuccin-decorations"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+path = "src/lib.rs"
+
+[dependencies]
+cxx = "1.0"
+autocxx = "0.26"
+catppuccin = "2.8.0"
+moveit = "0.6.0"
+ffi = "0.1.1"
+
+[build-dependencies]
+autocxx-build = "0.26"
+pkg-config = "0.3"
+cc = "1.0"
+
+[features]
+default = ["latte", "mocha"]
+qt6 = []
+latte = []
+frappe = []
+macchiato = []
+mocha = []
